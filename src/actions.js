@@ -50,6 +50,38 @@ var request = {
                 },
                 "src": "http://placehold.it/1000x750",
                 "width": 1000
+            },
+            {
+                "caption": "",
+                "credit": "Trois-Rivières",
+                "datetime": "2014:09:01 16:10:00",
+                "height": 1000,
+                "marker": {
+                    "coordinates": [
+                        -72.5425861111111,
+                        46.34213888888889
+                    ],
+                    "size": "small",
+                    "symbol": "beer"
+                },
+                "src": "http://placehold.it/750x1000",
+                "width": 750
+            },
+            {
+                "caption": "Viande et frites après une après-midi sportive",
+                "credit": "Trois-Rivières",
+                "datetime": "2014:09:01 16:20:52",
+                "height": 750,
+                "marker": {
+                    "coordinates": [
+                        -72.54259444444445,
+                        46.342175000000005
+                    ],
+                    "size": "small",
+                    "symbol": "restaurant"
+                },
+                "src": "http://placehold.it/1000x750",
+                "width": 1000
             }
         ];
         return new Promise(function (resolve) {

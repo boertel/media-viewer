@@ -1,4 +1,5 @@
 var React = require('react');
+var _ = require('lodash');
 
 var { Link } = require('react-router');
 
@@ -26,30 +27,41 @@ var Gallery = React.createClass({
             pictures: PictureStore.all()
         });
     },
-    render: function () {
-        var i = 0;
+    renderRow(pictures) {
         var ratio = 0;
         var margin = 10;
-        var length = this.state.pictures.length;
+        var length = pictures.length;
         var width = this.state.width - (length - 1) * margin;
 
-        this.state.pictures.forEach(function (picture) {
+
+        pictures.forEach(function (picture) {
             ratio += parseFloat(picture.aspect_ratio);
         });
 
-        var picturesList = this.state.pictures.map(function (picture, i) {
+        var picturesList = pictures.map(function (picture, i) {
             var style = {
                 display: 'inline'
             };
             style.marginRight = (i === length - 1) ? 0 : margin;
             return (
                 <div style={style}>
-                    <Link to="picture" params={{index: i++}}>
+                    <Link to="picture" params={{index: this.number++}}>
                         <Picture picture={picture} ratio={ratio} width={width} />
                     </Link>
                 </div>
             );
         }, this);
+
+        return (
+            <div>{picturesList}</div>
+        );
+    },
+    render: function () {
+        this.number = 0;
+        var max = 4;
+
+        var chunks = _.chunk(this.state.pictures, max);
+        var rows = chunks.map(this.renderRow);
 
         var viewer;
         if (this.props.params.index) {
@@ -60,7 +72,7 @@ var Gallery = React.createClass({
 
         return (
             <div>
-                {picturesList}
+                {rows}
                 {viewer}
             </div>
         );
