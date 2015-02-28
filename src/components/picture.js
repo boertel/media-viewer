@@ -13,11 +13,12 @@ var Picture = React.createClass({
 
         if (this.props.ratio) {
             width = Math.floor(this.props.width / this.props.ratio * picture.aspect_ratio);
+            // TODO handle when height is higher than the windowHeight
             height = Math.floor(this.props.width / this.props.ratio);
         }
 
         return (
-            <img src={this.props.picture.src} width={width} height={height} />
+            <img src={picture.src} width={width} height={height} />
         );
     }
 });

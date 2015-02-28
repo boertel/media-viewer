@@ -1,7 +1,9 @@
-var React = require('react');
 var _ = require('lodash');
 
-var { Link } = require('react-router');
+var React = require('react');
+var { Link, Navigation } = require('react-router');
+
+var Resize = require('../mixins/resize.js');
 
 var PictureStore = require('../stores/picture_store');
 var actions = require('../actions');
@@ -9,11 +11,9 @@ var actions = require('../actions');
 var Viewer = require('./viewer');
 var Picture = require('./picture');
 
-var Resize = require('../mixins/resize.js');
-
 
 var Gallery = React.createClass({
-    mixins: [ PictureStore.listenTo, Resize ],
+    mixins: [ PictureStore.listenTo, Resize, Navigation ],
     getInitialState: function () {
         return {
             pictures: []
@@ -21,6 +21,15 @@ var Gallery = React.createClass({
     },
     componentDidMount: function () {
         actions.pictures();
+        window.addEventListener('keydown', this.keydown);
+    },
+    componentWillUnmount: function () {
+        window.removeEventListener('keydown', this.keydown);
+    },
+    keydown: function (event) {
+        if (event.which === 27) {
+            this.transitionTo('gallery');
+        }
     },
     _onChange: function () {
         this.setState({
@@ -60,6 +69,7 @@ var Gallery = React.createClass({
         this.number = 0;
         var max = 4;
 
+        // chunck dispatch could be store somewhere i.e: [1,2,1]
         var chunks = _.chunk(this.state.pictures, max);
         var rows = chunks.map(this.renderRow);
 

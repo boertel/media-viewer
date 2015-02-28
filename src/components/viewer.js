@@ -1,8 +1,9 @@
 var React = require('react');
 var { Navigation, Link } = require('react-router');
-var Picture = require('./picture');
 
 var Resize = require('../mixins/resize');
+
+var Picture = require('./picture');
 
 
 var Viewer = React.createClass({
@@ -21,7 +22,7 @@ var Viewer = React.createClass({
         else if (event.which === 75 || event.which === 39) {
             index += 1;
         }
-        if (index !== this.props.params.index
+        if (index !== parseInt(this.props.params.index)
             && (index >= 0 && index < this.props.pictures.length)) {
             this.transitionTo('picture', {index: index});
         }

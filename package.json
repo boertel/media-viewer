@@ -9,10 +9,17 @@
     ]
   },
   "scripts": {
-    "develop": "watchify -d site.js -o bundle.js & ./node_modules/st/bin/server.js -nc"
+    "develop": "watchify -d site.js -o bundle.js & ./node_modules/st/bin/server.js -nc",
+    "test": "jest"
   },
-  "author": "",
-  "license": "ISC",
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/jest/preprocessor.js",
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react"
+    ]
+  },
+  "author": "Benjamin Oertel",
+  "license": "",
   "dependencies": {
     "babel": "^4.5.5",
     "browserify": "^9.0.3",
@@ -24,6 +31,8 @@
   },
   "devDependencies": {
     "babelify": "^5.0.3",
+    "jest-cli": "^0.4.0",
+    "react-tools": "^0.12.2",
     "st": "^0.5.3"
   }
 }
