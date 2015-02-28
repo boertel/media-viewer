@@ -1,0 +1,28 @@
+{
+  "name": "media-viewer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
+  "scripts": {
+    "develop": "watchify -d site.js -o bundle.js & ./node_modules/st/bin/server.js -nc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^4.5.5",
+    "browserify": "^9.0.3",
+    "flux": "^2.0.1",
+    "object-assign": "^2.0.0",
+    "react": "^0.12.2",
+    "react-router": "^0.12.4"
+  },
+  "devDependencies": {
+    "babelify": "^5.0.3",
+    "st": "^0.5.3"
+  }
+}
