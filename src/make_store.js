@@ -14,9 +14,6 @@ module.exports = function (options) {
             this.off(CHANGE_EVENT, callback);
         },
         listenTo: {
-            _onChange() {
-                console.warn('_onChange not defined');
-            },
             componentWillMount() {
                 store.addChangeListener(this._onChange);
             },

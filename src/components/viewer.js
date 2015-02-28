@@ -2,9 +2,11 @@ var React = require('react');
 var { Navigation, Link } = require('react-router');
 var Picture = require('./picture');
 
+var ContainerResize = require('../mixins/resize');
+
 
 var Viewer = React.createClass({
-    mixins: [ Navigation ],
+    mixins: [ Navigation, ContainerResize ],
     componentDidMount: function () {
         window.addEventListener('keydown', this.keydown);
     },
@@ -38,10 +40,10 @@ var Viewer = React.createClass({
             <div style={style}>
                 <Link to="gallery">Close</Link>
                 <div>
-                    <Picture picture={picture} />
+                    <Picture picture={picture} ratio={1.7} width={this.state.width} />
                 </div>
                 <div>
-                    <span>{ index + 1 }</span> - <span>{ this.props.pictures.length + 1 }</span>
+                    <span>{ index + 1 }</span> - <span>{ this.props.pictures.length }</span>
                 </div>
                 <div>
                     <Link to='picture' params={{index: index - 1}}>Previous</Link>
