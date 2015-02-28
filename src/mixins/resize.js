@@ -10,7 +10,8 @@ module.exports = {
         });
     },
     shouldComponentUpdate(nextProps, nextState) {
-        return nextState.width !== 0 && nextState.height !== 0;
+        //return nextState.width !== 0 && nextState.height !== 0;
+        return true;
     },
     componentDidMount() {
         this.resize();

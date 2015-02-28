@@ -30,14 +30,8 @@ var Viewer = React.createClass({
         var index = parseInt(this.props.params.index),
             picture = this.props.pictures[index];
 
-        var style = {
-            display: 'block'
-        };
-        if (this.props.params.index === undefined) {
-            style.display = 'none';
-        }
         return (
-            <div style={style}>
+            <div>
                 <Link to="gallery">Close</Link>
                 <div>
                     <Picture picture={picture} ratio={1.7} width={this.state.width} />

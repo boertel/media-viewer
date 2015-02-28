@@ -21,9 +21,6 @@ var Gallery = React.createClass({
     componentDidMount: function () {
         actions.pictures();
     },
-    addPicture: function (i) {
-        return () => actions.add("http://placehold.it/40x" + (i + 1) + "00");
-    },
     _onChange: function () {
         this.setState({
             pictures: PictureStore.all()
@@ -32,25 +29,39 @@ var Gallery = React.createClass({
     render: function () {
         var i = 0;
         var ratio = 0;
+        var margin = 10;
+        var length = this.state.pictures.length;
+        var width = this.state.width - (length - 1) * margin;
 
         this.state.pictures.forEach(function (picture) {
             ratio += parseFloat(picture.aspect_ratio);
         });
 
-        var picturesList = this.state.pictures.map(function (picture) {
+        var picturesList = this.state.pictures.map(function (picture, i) {
+            var style = {
+                display: 'inline'
+            };
+            style.marginRight = (i === length - 1) ? 0 : margin;
             return (
-                <Link to="picture" params={{index: i++}}>
-                    <Picture picture={picture} ratio={ratio} width={this.state.width} />
-                </Link>
+                <div style={style}>
+                    <Link to="picture" params={{index: i++}}>
+                        <Picture picture={picture} ratio={ratio} width={width} />
+                    </Link>
+                </div>
             );
         }, this);
 
-        picturesList.push(<a href="#" onClick={this.addPicture(i)}>Add</a>);
+        var viewer;
+        if (this.props.params.index) {
+            viewer = (
+                <Viewer params={this.props.params} pictures={this.state.pictures} />
+            );
+        }
 
         return (
             <div>
                 {picturesList}
-                <Viewer params={this.props.params} pictures={this.state.pictures} />
+                {viewer}
             </div>
         );
     }
