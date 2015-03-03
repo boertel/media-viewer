@@ -1,12 +1,15 @@
-module.exports = {
+var ResizeMixin = {
     getInitialState() {
         return {
-            windowWidth: 0
+            windowWidth: 0,
+            windowHeight: 0
         };
     },
     resize: function () {
+        var node = this.getDOMNode();
         this.setState({
-            windowWidth: this.getDOMNode().offsetWidth
+            windowWidth: node.offsetWidth,
+            windowHeight: window.innerHeight
         });
     },
     shouldComponentUpdate(nextProps, nextState) {
@@ -20,3 +23,5 @@ module.exports = {
         window.removeEventListener('resize', this.resize);
     }
 };
+
+module.exports = ResizeMixin;

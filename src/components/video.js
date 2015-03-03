@@ -1,9 +1,12 @@
 var React = require('react');
 
+var Ratio = require('../mixins/ratio');
+
 var querystring = require('querystring');
 
 
 var Video = React.createClass({
+    mixins: [ Ratio ],
     render: function () {
         var options = {
             badge: 0,
@@ -12,16 +15,9 @@ var Video = React.createClass({
             portrait: 0
         };
 
-        var width = this.props.width,
-            height = this.props.height;
 
-        if (this.props.ratio) {
-            // same code as Picture, ratioMixin ?! or parent component ?
-            var ratio = this.props.ratio / 0.7;
-            width = Math.floor(this.props.windowWidth / ratio * this.props.aspect_ratio);
-            // TODO handle when height is higher than the windowHeight
-            height = Math.floor(this.props.windowWidth / ratio);
-        }
+        var ratio = this.props.ratio / 0.7;
+        var { width, height } = this.ratio(ratio);
 
         var url = this.props.url + '?' + querystring.stringify(options);
 

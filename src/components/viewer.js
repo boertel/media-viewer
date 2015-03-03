@@ -9,7 +9,7 @@ var components = require('./index');
 
 
 var Viewer = React.createClass({
-    mixins: [ MediaStore.listenTo, Navigation ],
+    mixins: [ MediaStore.listenTo, Navigation, Resize ],
     getInitialState: function () {
         return {
             media: []
@@ -35,22 +35,33 @@ var Viewer = React.createClass({
             index += 1;
         }
         if (index !== this.props.params.index
-            && (index >= 0 && index < this.state.media.length)) {
+            && this.limit(index)()) {
             this.transitionTo('media', {index: index});
         }
+    },
+    limit: function (index) {
+        index = index || this.props.params.index
+        return (function () {
+            return (index >= 0 && index < this.state.media.length)
+        }).bind(this)
     },
     render: function () {
         var index = this.props.params.index;
         var media = this.state.media;
         var medium = media[index] || {};
 
-        if (media.length === 0) {
-            return null;
+        // FIXME I fell that this is a HACK, to many empty render are happening
+        if (medium.type === undefined) {
+            return <div></div>;
         }
 
+        var windowHeight = this.state.windowHeight * 0.7;
+        // TODO handle ratio per medium or default
         var Component = components[medium.type];
-        var component = <Component ratio={1.7} width={this.state.width} {...medium.props} />;
+        var component = <Component ratio={1} windowWidth={this.state.windowWidth} windowHeight={windowHeight} {...medium.props} />;
 
+        var previousOnClick = this.limit(index - 1);
+        var nextOnClick = this.limit(index + 1);
         return (
             <div>
                 <Link to="day">Close</Link>
@@ -61,9 +72,9 @@ var Viewer = React.createClass({
                     <span>{ index + 1 }</span> - <span>{ media.length }</span>
                 </div>
                 <div>
-                    <Link to='media' params={{index: index - 1}}>Previous</Link>
+                    <Link onClick={previousOnClick} to='media' params={{index: index - 1}}>Previous</Link>
                     <span> - </span>
-                    <Link to='media' params={{index: index + 1}}>Next</Link>
+                    <Link onClick={nextOnClick} to='media' params={{index: index + 1}}>Next</Link>
                 </div>
             </div>
         );

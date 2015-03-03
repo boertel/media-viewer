@@ -28,6 +28,7 @@ module.exports = function (element) {
     );
 
     Router.run(routes, function (Handler, state) {
+        // TODO define list of params and validation somewhere
         if (state.params.index !== undefined) {
             state.params.index = parseInt(state.params.index, 10);
         }

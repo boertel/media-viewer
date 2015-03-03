@@ -1,19 +1,12 @@
 var React = require('react');
 
-var Picture = React.createClass({
-    getDefaultProps: function () {
-        return {
-            width: 0
-        };
-    },
-    render: function () {
-        var width, height;
+var Ratio = require('../mixins/ratio');
 
-        if (this.props.ratio) {
-            width = Math.floor(this.props.windowWidth / this.props.ratio * this.props.aspect_ratio);
-            // TODO handle when height is higher than the windowHeight
-            height = Math.floor(this.props.windowWidth / this.props.ratio);
-        }
+
+var Picture = React.createClass({
+    mixins: [ Ratio ],
+    render: function () {
+        var { width, height } = this.ratio();
 
         return (
             <img src={this.props.src} width={width} height={height} />

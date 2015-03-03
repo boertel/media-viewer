@@ -5,7 +5,7 @@ var actions = require('../actions');
 
 var Viewer = require('./viewer');
 
-// circular dependency is causing issue
+// TODO circular dependency is causing issue
 var components = require('./index');
 components.Gallery = require('./gallery');
 
@@ -37,6 +37,7 @@ var Day = React.createClass({
         return boxes;
     },
     render: function () {
+        // TODO investigate empty renders
         var boxes = this.renderBoxes();
         var viewer = <Viewer params={this.props.params} />
 
