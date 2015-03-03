@@ -33,7 +33,7 @@ var Viewer = React.createClass({
 
         return (
             <div>
-                <Link to="gallery">Close</Link>
+                <Link to="day">Close</Link>
                 <div>
                     <Picture picture={picture} ratio={1.7} width={this.state.width} />
                     <p>{picture.caption}</p>

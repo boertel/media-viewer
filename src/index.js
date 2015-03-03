@@ -3,8 +3,7 @@ var Router = require('react-router');
 var { Route, DefaultRoute, RouteHandler } = Router;
 var { PropTypes } = React;
 
-var Viewer = require('./components/viewer.js'),
-    Gallery = require('./components/gallery.js');
+var Day = require('./components/day.js');
 
 var App = React.createClass({
     propTypes: {
@@ -22,9 +21,9 @@ var App = React.createClass({
 
 module.exports = function (element) {
     var routes = (
-        <Route handler={App} path='/' name='gallery'>
-            <DefaultRoute handler={Gallery} />
-            <Route name='picture' path='/:index' handler={Gallery} />
+        <Route handler={App} path='/' name='day'>
+            <DefaultRoute handler={Day} />
+            <Route name='picture' path='/:index' handler={Day} />
         </Route>
     );
 

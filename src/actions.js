@@ -84,9 +84,41 @@ var request = {
                 "width": 1000
             }
         ];
+
+        var data = [
+            {
+                type: 'text',
+                key: 0,
+                props: {
+                    title: 'Day 1: ????',
+                    text: 'Hello World!'
+                }
+            },
+            {
+                type: 'images',
+                key: 1,
+                props: {
+                    pictures: pictures
+                }
+            },
+            {
+                type: 'text',
+                key: 2,
+                props: {
+                    text: 'Pouet pouet pouet pouet'
+                }
+            },
+            {
+                type: 'images',
+                key: 3,
+                props: {
+                    pictures: pictures
+                }
+            }
+        ];
         return new Promise(function (resolve) {
             window.setTimeout(function () {
-                resolve(pictures);
+                resolve(data);
             }, 1000);
         });
     },
@@ -101,13 +133,18 @@ var request = {
 
 
 var actions = {
-    pictures: function (callback) {
-        request.get('/pictures').then(function (pictures) {
+    boxes: function () {
+        request.get('/boxes').then(function (boxes) {
             Dispatcher.handleViewAction({
-                actionType: 'picturesLoaded',
-                pictures: pictures
+                actionType: 'boxesLoaded',
+                boxes: boxes
             });
-            callback && callback();
+        });
+    },
+    pictures: function (id) {
+        Dispatcher.handleViewAction({
+            actionType: 'picturesLoaded',
+            id: id
         });
     },
     add: function (picture) {

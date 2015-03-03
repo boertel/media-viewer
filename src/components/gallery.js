@@ -12,6 +12,7 @@ var Viewer = require('./viewer');
 var Picture = require('./picture');
 
 
+
 var Gallery = React.createClass({
     mixins: [ PictureStore.listenTo, Resize, Navigation ],
     getInitialState: function () {
@@ -20,7 +21,6 @@ var Gallery = React.createClass({
         }
     },
     componentDidMount: function () {
-        actions.pictures();
         window.addEventListener('keydown', this.keydown);
     },
     componentWillUnmount: function () {
@@ -28,20 +28,17 @@ var Gallery = React.createClass({
     },
     keydown: function (event) {
         if (event.which === 27) {
-            this.transitionTo('gallery');
+            this.transitionTo('day');
         }
     },
     _onChange: function () {
-        this.setState({
-            pictures: PictureStore.all()
-        });
+        this.setState(PictureStore.get(this.props.id));
     },
     renderRow(pictures) {
         var ratio = 0;
         var margin = 10;
         var length = pictures.length;
         var width = this.state.width - (length - 1) * margin;
-
 
         pictures.forEach(function (picture) {
             ratio += parseFloat(picture.aspect_ratio);
@@ -66,13 +63,14 @@ var Gallery = React.createClass({
         );
     },
     render: function () {
-        this.number = 0;
+        this.number = this.state.length;
         var max = 4;
 
         // chunck dispatch could be store somewhere i.e: [1,2,1]
         var chunks = _.chunk(this.state.pictures, max);
         var rows = chunks.map(this.renderRow);
 
+        // TODO needs to be at the day level
         var viewer;
         if (this.props.params.index) {
             viewer = (
