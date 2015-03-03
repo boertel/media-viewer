@@ -23,7 +23,7 @@ module.exports = function (element) {
     var routes = (
         <Route handler={App} path='/' name='day'>
             <DefaultRoute handler={Day} />
-            <Route name='picture' path='/:index' handler={Day} />
+            <Route name='picture' path='/:index' handler={Day} ignoreScrollBehavior={true} />
         </Route>
     );
 

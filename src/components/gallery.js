@@ -17,7 +17,8 @@ var Gallery = React.createClass({
     mixins: [ PictureStore.listenTo, Resize, Navigation ],
     getInitialState: function () {
         return {
-            pictures: []
+            pictures: [],
+            length: 0
         }
     },
     componentDidMount: function () {
@@ -63,25 +64,16 @@ var Gallery = React.createClass({
         );
     },
     render: function () {
-        this.number = this.state.length;
         var max = 4;
+        this.number = this.state.length;
 
         // chunck dispatch could be store somewhere i.e: [1,2,1]
         var chunks = _.chunk(this.state.pictures, max);
         var rows = chunks.map(this.renderRow);
 
-        // TODO needs to be at the day level
-        var viewer;
-        if (this.props.params.index) {
-            viewer = (
-                <Viewer params={this.props.params} pictures={this.state.pictures} />
-            );
-        }
-
         return (
             <div>
                 {rows}
-                {viewer}
             </div>
         );
     }
