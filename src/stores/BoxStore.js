@@ -1,4 +1,4 @@
-var makeStore = require('../make_store'),
+var makeStore = require('./makeStore'),
     Dispatcher = require('../dispatcher');
 
 

@@ -4,14 +4,10 @@ var BoxStore = require('../stores/BoxStore');
 var actions = require('../actions');
 
 var Viewer = require('./viewer');
-var Images = require('./gallery');
-var Text = require('./text');
 
-
-var components = {
-    images: Images,
-    text: Text
-};
+// circular dependency is causing issue
+var components = require('./index');
+components.Gallery = require('./gallery');
 
 
 var Day = React.createClass({
@@ -34,36 +30,15 @@ var Day = React.createClass({
             var Component = components[box.type];
             return (
                 <div>
-                    <Component id={box.key} {...box.props} params={this.props.params} />
+                    <Component id={box.key} key={box.key} {...box.props} params={this.props.params} />
                 </div>
             );
         }, this);
         return boxes;
     },
-    renderViewer: function () {
-        var viewer;
-
-        var pictures = this.state.boxes.filter(function (box) {
-            return box.type === 'images';
-        }).map(function (box) {
-            return box.props.pictures;
-        })
-        if (pictures.length > 0) {
-            pictures = pictures.reduce(function (a, b) {
-                return a.concat(b);
-            });
-
-            if (this.props.params.index) {
-                viewer = (
-                    <Viewer params={this.props.params} pictures={pictures} />
-                );
-            }
-        }
-        return viewer;
-    },
     render: function () {
         var boxes = this.renderBoxes();
-        var viewer = this.renderViewer();
+        var viewer = <Viewer params={this.props.params} />
 
         return (
             <div>

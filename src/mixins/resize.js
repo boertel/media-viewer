@@ -1,16 +1,16 @@
 module.exports = {
     getInitialState() {
         return {
-            width: 0
+            windowWidth: 0
         };
     },
     resize: function () {
         this.setState({
-            width: this.getDOMNode().offsetWidth
+            windowWidth: this.getDOMNode().offsetWidth
         });
     },
     shouldComponentUpdate(nextProps, nextState) {
-        return nextState.width !== 0 && nextState.height !== 0;
+        return nextState.windowWidth !== 0 && nextState.windowHeight !== 0;
     },
     componentDidMount() {
         this.resize();

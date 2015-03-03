@@ -3,48 +3,67 @@ var { Navigation, Link } = require('react-router');
 
 var Resize = require('../mixins/resize');
 
-var Picture = require('./picture');
+var MediaStore = require('../stores/MediaStore');
+
+var components = require('./index');
 
 
 var Viewer = React.createClass({
-    mixins: [ Navigation, Resize ],
+    mixins: [ MediaStore.listenTo, Navigation ],
+    getInitialState: function () {
+        return {
+            media: []
+        };
+    },
     componentDidMount: function () {
         window.addEventListener('keydown', this.keydown);
     },
     componentWillUnmount: function () {
         window.removeEventListener('keydown', this.keydown);
     },
+    _onChange: function () {
+        this.setState({
+            media: MediaStore.all()
+        });
+    },
     keydown: function (event) {
-        var index = parseInt(this.props.params.index);
+        var index = this.props.params.index;
         if (event.which === 74 || event.which === 37) {
             index -= 1;
         }
         else if (event.which === 75 || event.which === 39) {
             index += 1;
         }
-        if (index !== parseInt(this.props.params.index)
-            && (index >= 0 && index < this.props.pictures.length)) {
-            this.transitionTo('picture', {index: index});
+        if (index !== this.props.params.index
+            && (index >= 0 && index < this.state.media.length)) {
+            this.transitionTo('media', {index: index});
         }
     },
     render: function () {
-        var index = parseInt(this.props.params.index),
-            picture = this.props.pictures[index] || {};
+        var index = this.props.params.index;
+        var media = this.state.media;
+        var medium = media[index] || {};
+
+        if (media.length === 0) {
+            return null;
+        }
+
+        var Component = components[medium.type];
+        var component = <Component ratio={1.7} width={this.state.width} {...medium.props} />;
 
         return (
             <div>
                 <Link to="day">Close</Link>
                 <div>
-                    <Picture picture={picture} ratio={1.7} width={this.state.width} />
-                    <p>{picture.caption}</p>
+                    {component}
                 </div>
                 <div>
-                    <span>{ index + 1 }</span> - <span>{ this.props.pictures.length }</span>
+                    <span>{ index + 1 }</span> - <span>{ media.length }</span>
                 </div>
                 <div>
-                    <Link to='picture' params={{index: index - 1}}>Previous</Link>
+                    <Link to='media' params={{index: index - 1}}>Previous</Link>
                     <span> - </span>
-                    <Link to='picture' params={{index: index + 1}}>Next</Link>
+                    <Link to='media' params={{index: index + 1}}>Next</Link>
                 </div>
             </div>
         );

@@ -5,21 +5,18 @@ var { Link, Navigation } = require('react-router');
 
 var Resize = require('../mixins/resize.js');
 
-var PictureStore = require('../stores/picture_store');
+var MediaStore = require('../stores/MediaStore');
 var actions = require('../actions');
 
-var Viewer = require('./viewer');
-var Picture = require('./picture');
-
+var components = require('./index');
 
 
 var Gallery = React.createClass({
-    mixins: [ PictureStore.listenTo, Resize, Navigation ],
+    mixins: [ MediaStore.listenTo, Resize, Navigation ],
     getInitialState: function () {
         return {
-            pictures: [],
-            length: 0
-        }
+            media: []
+        };
     },
     componentDidMount: function () {
         window.addEventListener('keydown', this.keydown);
@@ -33,42 +30,45 @@ var Gallery = React.createClass({
         }
     },
     _onChange: function () {
-        this.setState(PictureStore.get(this.props.id));
+        // TODO need the id here?
+        this.setState(MediaStore.get(this.props.id));
     },
-    renderRow(pictures) {
-        var ratio = 0;
+    renderRow: function (media) {
         var margin = 10;
-        var length = pictures.length;
-        var width = this.state.width - (length - 1) * margin;
+        var length = media.length;
+        var windowWidth = this.state.windowWidth - (length - 1) * margin;
 
-        pictures.forEach(function (picture) {
-            ratio += parseFloat(picture.aspect_ratio);
-        });
+        var ratio = media.reduce(function (prev, medium) {
+            return prev + medium.props.aspect_ratio;
+        }, 0);
 
-        var picturesList = pictures.map(function (picture, i) {
+        var mediaList = media.map(function (medium, i) {
             var style = {
                 display: 'inline'
             };
             style.marginRight = (i === length - 1) ? 0 : margin;
+            var Component = components[medium.type];
+            var component = <Component {...medium.props} ratio={ratio} windowWidth={windowWidth} />
             return (
                 <div style={style}>
-                    <Link to="picture" params={{index: this.number++}}>
-                        <Picture picture={picture} ratio={ratio} width={width} />
+                    <Link to="media" params={{index: this.counter++}}>
+                        {component}
                     </Link>
                 </div>
             );
         }, this);
 
         return (
-            <div>{picturesList}</div>
+            <div>{mediaList}</div>
         );
     },
     render: function () {
+        // TODO props ?
         var max = 4;
-        this.number = this.state.length;
+        this.counter = this.state.counter;
 
         // chunck dispatch could be store somewhere i.e: [1,2,1]
-        var chunks = _.chunk(this.state.pictures, max);
+        var chunks = _.chunk(this.state.media, max);
         var rows = chunks.map(this.renderRow);
 
         return (

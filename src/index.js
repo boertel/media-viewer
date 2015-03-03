@@ -23,11 +23,14 @@ module.exports = function (element) {
     var routes = (
         <Route handler={App} path='/' name='day'>
             <DefaultRoute handler={Day} />
-            <Route name='picture' path='/:index' handler={Day} ignoreScrollBehavior={true} />
+            <Route name='media' path='/:index' handler={Day} ignoreScrollBehavior={true} />
         </Route>
     );
 
     Router.run(routes, function (Handler, state) {
+        if (state.params.index !== undefined) {
+            state.params.index = parseInt(state.params.index, 10);
+        }
         React.render(<Handler {...state} />, element);
     });
 };
