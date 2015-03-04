@@ -5,6 +5,7 @@ var Resize = require('../mixins/resize');
 
 var MediaStore = require('../stores/MediaStore');
 
+var Loader = require('./loader');
 var components = require('./index');
 
 
@@ -22,6 +23,7 @@ var Viewer = React.createClass({
         window.removeEventListener('keydown', this.keydown);
     },
     _onChange: function () {
+        // TODO weird, should be something done in the DidMount (mixin listenTo is doing it for us?)
         this.setState({
             media: MediaStore.all()
         });
@@ -48,12 +50,12 @@ var Viewer = React.createClass({
     render: function () {
         var index = this.props.params.index;
         var media = this.state.media;
-        var medium = media[index] || {};
 
-        // FIXME I fell that this is a HACK, to many empty render are happening
-        if (medium.type === undefined) {
-            return <div></div>;
+        if (media.length === 0) {
+            return <Loader />
         }
+
+        var medium = media[index] || {};
 
         var windowHeight = this.state.windowHeight * 0.7;
         // TODO handle ratio per medium or default

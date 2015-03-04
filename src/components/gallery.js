@@ -30,7 +30,6 @@ var Gallery = React.createClass({
         }
     },
     _onChange: function () {
-        // TODO need the id here?
         this.setState(MediaStore.get(this.props.id));
     },
     renderRow: function (media) {
@@ -63,7 +62,7 @@ var Gallery = React.createClass({
         );
     },
     render: function () {
-        // TODO props ?
+        // TODO props ? from the store ?
         var max = 4;
         this.counter = this.state.counter;
 

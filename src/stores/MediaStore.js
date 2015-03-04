@@ -8,7 +8,6 @@ var _counter = 0;
 
 var MediaStore = makeStore({
     all: function () {
-        // TODO all returns different format as get ?! make sense or not ?
         return _.flatten(_media.map(function (medium) {
             return medium.props.media;
         }));

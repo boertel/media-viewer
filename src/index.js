@@ -3,6 +3,8 @@ var Router = require('react-router');
 var { Route, DefaultRoute, RouteHandler } = Router;
 var { PropTypes } = React;
 
+var _ = require('lodash');
+
 var Day = require('./components/day.js');
 
 var App = React.createClass({
@@ -19,6 +21,12 @@ var App = React.createClass({
     }
 });
 
+var parse = {
+    index: function (value) {
+        return parseInt(value, 10);
+    }
+};
+
 module.exports = function (element) {
     var routes = (
         <Route handler={App} path='/' name='day'>
@@ -28,10 +36,12 @@ module.exports = function (element) {
     );
 
     Router.run(routes, function (Handler, state) {
-        // TODO define list of params and validation somewhere
-        if (state.params.index !== undefined) {
-            state.params.index = parseInt(state.params.index, 10);
-        }
+        _.forOwn(state.params, function (value, key) {
+            if (parse[key] !== undefined) {
+                value = parse[key](value);
+            }
+        });
+
         React.render(<Handler {...state} />, element);
     });
 };
