@@ -13,9 +13,9 @@ TripStore.dispatcherToken = Dispatcher.register(payload => {
     switch (action.actionType) {
         case 'tripLoaded':
             _trips[action.trip.slug] = action.trip;
+            TripStore.emitChange();
         break;
     }
-    TripStore.emitChange();
     return true;
 });
 

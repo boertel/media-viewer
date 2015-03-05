@@ -38,9 +38,9 @@ MediaStore.dispatcherToken = Dispatcher.register(payload => {
                 _counter += box.props.media.length;
             });
             _media = _media.concat(nextMedia);
+            MediaStore.emitChange();
         break;
     }
-    MediaStore.emitChange();
     return true;
 });
 

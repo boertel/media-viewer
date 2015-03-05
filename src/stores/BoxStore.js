@@ -15,9 +15,9 @@ BoxStore.dispatcherToken = Dispatcher.register(payload => {
     switch (action.actionType) {
         case 'boxesLoaded':
             _boxes[action.day] = action.boxes;
+            BoxStore.emitChange();
         break;
     }
-    BoxStore.emitChange();
     return true;
 });
 
