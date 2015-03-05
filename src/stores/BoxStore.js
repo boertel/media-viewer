@@ -2,10 +2,11 @@ var makeStore = require('./makeStore'),
     Dispatcher = require('../dispatcher');
 
 
-var _boxes = [];
+var _boxes = {};
 
 var BoxStore = makeStore({
-    all: () => _boxes
+    all: () => _boxes,
+    get: (index) => _boxes[index]
 });
 
 BoxStore.dispatcherToken = Dispatcher.register(payload => {
@@ -13,7 +14,7 @@ BoxStore.dispatcherToken = Dispatcher.register(payload => {
 
     switch (action.actionType) {
         case 'boxesLoaded':
-            _boxes = action.boxes;
+            _boxes[action.day] = action.boxes;
         break;
     }
     BoxStore.emitChange();

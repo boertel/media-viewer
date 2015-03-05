@@ -18,21 +18,10 @@ var Gallery = React.createClass({
             media: []
         };
     },
-    componentDidMount: function () {
-        window.addEventListener('keydown', this.keydown);
-    },
-    componentWillUnmount: function () {
-        window.removeEventListener('keydown', this.keydown);
-    },
-    keydown: function (event) {
-        if (event.which === 27) {
-            this.transitionTo('day');
-        }
-    },
     _onChange: function () {
         this.setState(MediaStore.get(this.props.id));
     },
-    renderRow: function (media) {
+    renderRow: function (media, i) {
         var margin = 10;
         var length = media.length;
         var windowWidth = this.state.windowWidth - (length - 1) * margin;
@@ -46,19 +35,21 @@ var Gallery = React.createClass({
                 display: 'inline'
             };
             style.marginRight = (i === length - 1) ? 0 : margin;
+            var key = 'media-' + i;
             var Component = components[medium.type];
             var component = <Component {...medium.props} ratio={ratio} windowWidth={windowWidth} />
             return (
-                <div style={style}>
-                    <Link to="media" params={{index: this.counter++}}>
+                <div style={style} key={key}>
+                    <Link to='media' params={{day: this.props.params.day, index: this.counter++}}>
                         {component}
                     </Link>
                 </div>
             );
         }, this);
 
+        var rowKey = 'row' + i;
         return (
-            <div>{mediaList}</div>
+            <div key={rowKey}>{mediaList}</div>
         );
     },
     render: function () {

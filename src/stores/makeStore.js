@@ -11,13 +11,13 @@ module.exports = function (options) {
             this.on(CHANGE_EVENT, callback);
         },
         removeChangeListener(callback) {
-            this.off(CHANGE_EVENT, callback);
+            this.removeListener(CHANGE_EVENT, callback);
         },
         listenTo: {
             componentWillMount() {
                 store.addChangeListener(this._onChange);
             },
-            componentDidUnmount() {
+            componentWillUnmount() {
                 store.removeChangeListener(this._onChange);
             }
         }

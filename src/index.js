@@ -5,7 +5,9 @@ var { PropTypes } = React;
 
 var _ = require('lodash');
 
-var Day = require('./components/day.js');
+var Day = require('./components/day');
+var Trip = require('./components/trip');
+var Timeline = require('./components/timeline');
 
 var App = React.createClass({
     propTypes: {
@@ -24,21 +26,27 @@ var App = React.createClass({
 var parse = {
     index: function (value) {
         return parseInt(value, 10);
+    },
+    day: function (value) {
+        return parseInt(value, 10);
     }
 };
 
 module.exports = function (element) {
     var routes = (
-        <Route handler={App} path='/' name='day'>
-            <DefaultRoute handler={Day} />
-            <Route name='media' path='/:index' handler={Day} ignoreScrollBehavior={true} />
+        <Route handler={App} path='/'>
+            <Route name='trip' handler={Trip}>
+                <Route name='day' path='/:day' handler={Day} ignoreScrollBehavior={true} />
+                <Route name='media' path='/:day/:index' handler={Day} ignoreScrollBehavior={true} />
+                <DefaultRoute handler={Trip} />
+            </Route>
         </Route>
     );
 
     Router.run(routes, function (Handler, state) {
         _.forOwn(state.params, function (value, key) {
             if (parse[key] !== undefined) {
-                value = parse[key](value);
+                state.params[key] = parse[key](value);
             }
         });
 

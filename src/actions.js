@@ -1,7 +1,7 @@
 var Dispatcher = require('./dispatcher');
 
 var request = {
-    get: function (path) {
+    get: function (path, data) {
         var pictures = [
             {
                 "type": "Picture",
@@ -112,41 +112,56 @@ var request = {
             }
         ];
 
-        var data = [
-            {
-                key: 0,
-                type: 'Text',
-                props: {
-                    title: 'Day 1: ????',
-                    text: 'Hello World!'
+        var response = {
+            1: [
+                {
+                    key: 0,
+                    type: 'Text',
+                    props: {
+                        title: 'Day 1',
+                        text: 'Départ 23h de SF, arrivée 8h du mat à New York. Il faut maintenant que j\'attende mon frère qui arrive à 12h. Question: que faire en attendant 4 heures à l\'aéroport ?'
+                    }
+                },
+                {
+                    "key": 1,
+                    "type": "Gallery",
+                    "props": {"media": pictures}
+                },
+                {
+                    key: 2,
+                    type: 'Text',
+                    props: {
+                        text: 'Pouet pouet pouet pouet'
+                    }
                 }
-            },
-            {
-                "key": 1,
-                "type": "Gallery",
-                "props": {"media": pictures}
-            },
-            {
-                key: 2,
-                type: 'Text',
-                props: {
-                    text: 'Pouet pouet pouet pouet'
+            ],
+            2: [
+                {
+                    key: 3,
+                    type: 'Text',
+                    props: {
+                        title: 'Day 2',
+                        text: "Assez passé de temps dans l'aéroport, il est temps d'aller explorer la ville. Au programme de l'après midi: de la 33th st au sud de Central Park."
+                    }
+                },
+                {
+                    key: 5,
+                    type: 'Text',
+                    props: {
+                        text: 'work'
+                    }
+                },
+                {
+                    "key": 4,
+                    "type": "Gallery",
+                    "props": {"media": [pictures[0]]}
                 }
-            },
-            {
-                "key": 3,
-                "type": "Gallery",
-                "props": {"media": pictures}
-            },
-            {
-                "key": 4,
-                "type": "Gallery",
-                "props": {"media": videos}
-            }
-        ];
+            ]
+        };
+
         return new Promise(function (resolve) {
             window.setTimeout(function () {
-                resolve(data);
+                resolve(response[data.day]);
             }, 1000);
         });
     },
@@ -161,10 +176,14 @@ var request = {
 
 
 var actions = {
-    boxes: function () {
-        request.get('/boxes').then(function (boxes) {
+    boxes: function (day) {
+        var data = {
+            day: day
+        };
+        request.get('/boxes', data).then(function (boxes) {
             Dispatcher.handleViewAction({
                 actionType: 'boxesLoaded',
+                day: day,
                 boxes: boxes
             });
         });

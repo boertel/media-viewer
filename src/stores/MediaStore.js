@@ -4,7 +4,6 @@ var makeStore = require('./makeStore');
 var Dispatcher = require('../dispatcher');
 
 var _media = [];
-var _counter = 0;
 
 var MediaStore = makeStore({
     all: function () {
@@ -24,10 +23,11 @@ MediaStore.dispatcherToken = Dispatcher.register(payload => {
     var action = payload.action;
     switch (action.actionType) {
         case 'boxesLoaded':
-            _media = action.boxes.filter(function (box) {
+            var _counter = 0;
+            var nextMedia = action.boxes.filter(function (box) {
                 return box.type === 'Gallery';
             });
-            _media.forEach(function (box) {
+            nextMedia.forEach(function (box) {
                 box.props.counter = 0;
                 box.props.media.forEach(function (medium) {
                     if (medium.props.width  && medium.props.height) {
@@ -37,6 +37,7 @@ MediaStore.dispatcherToken = Dispatcher.register(payload => {
                 box.props.counter = _counter;
                 _counter += box.props.media.length;
             });
+            _media = _media.concat(nextMedia);
         break;
     }
     MediaStore.emitChange();

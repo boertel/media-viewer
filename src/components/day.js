@@ -21,19 +21,25 @@ var Day = React.createClass({
         };
     },
     componentDidMount: function () {
-        actions.boxes();
+        actions.boxes(this.props.params.day);
+    },
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.params.day !== this.props.params.day) {
+            actions.boxes(nextProps.params.day);
+        }
     },
     _onChange: function () {
         this.setState({
-            boxes: BoxStore.all()
+            boxes: BoxStore.get(this.props.params.day)
         });
     },
     renderBoxes: function () {
         var boxes = this.state.boxes.map(function (box, i) {
             var Component = components[box.type];
+            var key = 'box-' + i;
             return (
-                <div>
-                    <Component id={box.key} key={box.key} {...box.props} params={this.props.params} />
+                <div key={key}>
+                    <Component id={box.key} {...box.props} params={this.props.params} />
                 </div>
             );
         }, this);
@@ -45,17 +51,15 @@ var Day = React.createClass({
         }
 
         var boxes = this.renderBoxes();
-        // TODO Viewer needs to be close to document.body to avoid wrappers position relative
-        var viewer = <Viewer params={this.props.params} />
+        var viewer = null;
+        if (this.props.params.index !== undefined) {
+            viewer = <Viewer params={this.props.params} />;
+        }
 
         return (
             <div>
-                <div>
-                    {boxes}
-                </div>
-                <div>
-                    {viewer}
-                </div>
+                {boxes}
+                {viewer}
             </div>
         );
     }

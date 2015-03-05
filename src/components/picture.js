@@ -9,9 +9,7 @@ var Picture = React.createClass({
         var { width, height } = this.ratio();
 
         return (
-            <LazyLoad height={height}>
-                <img src={this.props.src} width={width} height={height} />
-            </LazyLoad>
+            <img src={this.props.src} width={width} height={height} />
         );
     }
 });

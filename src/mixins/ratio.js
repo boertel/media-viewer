@@ -15,8 +15,8 @@ var RatioMixin = {
         }
 
         return {
-            width: width,
-            height: height
+            width: Math.floor(width),
+            height: Math.floor(height)
         };
     }
 };
