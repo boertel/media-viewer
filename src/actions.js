@@ -112,56 +112,71 @@ var request = {
             }
         ];
 
-        var response = {
-            1: [
-                {
-                    key: 0,
-                    type: 'Text',
-                    props: {
-                        title: 'Day 1',
-                        text: 'Départ 23h de SF, arrivée 8h du mat à New York. Il faut maintenant que j\'attende mon frère qui arrive à 12h. Question: que faire en attendant 4 heures à l\'aéroport ?'
+        var response = {};
+        response['/boxes'] = function (d) {
+               var r = {
+                1: [
+                    {
+                        key: 0,
+                        type: 'Text',
+                        props: {
+                            title: 'Day 1',
+                            text: 'Départ 23h de SF, arrivée 8h du mat à New York. Il faut maintenant que j\'attende mon frère qui arrive à 12h. Question: que faire en attendant 4 heures à l\'aéroport ?'
+                        }
+                    },
+                    {
+                        "key": 1,
+                        "type": "Gallery",
+                        "props": {"media": pictures}
+                    },
+                    {
+                        key: 2,
+                        type: 'Text',
+                        props: {
+                            text: 'Pouet pouet pouet pouet'
+                        }
                     }
-                },
-                {
-                    "key": 1,
-                    "type": "Gallery",
-                    "props": {"media": pictures}
-                },
-                {
-                    key: 2,
-                    type: 'Text',
-                    props: {
-                        text: 'Pouet pouet pouet pouet'
+                ],
+                2: [
+                    {
+                        key: 3,
+                        type: 'Text',
+                        props: {
+                            title: 'Day 2',
+                            text: "Assez passé de temps dans l'aéroport, il est temps d'aller explorer la ville. Au programme de l'après midi: de la 33th st au sud de Central Park."
+                        }
+                    },
+                    {
+                        key: 5,
+                        type: 'Text',
+                        props: {
+                            text: 'work'
+                        }
+                    },
+                    {
+                        "key": 4,
+                        "type": "Gallery",
+                        "props": {"media": [pictures[0]]}
                     }
+                ]
+            };
+            return r[data.day];
+        };
+
+        response['/trip'] = function (d) {
+            var r = {
+                'newyork': {
+                    slug: 'newyork',
+                    days: 2
                 }
-            ],
-            2: [
-                {
-                    key: 3,
-                    type: 'Text',
-                    props: {
-                        title: 'Day 2',
-                        text: "Assez passé de temps dans l'aéroport, il est temps d'aller explorer la ville. Au programme de l'après midi: de la 33th st au sud de Central Park."
-                    }
-                },
-                {
-                    key: 5,
-                    type: 'Text',
-                    props: {
-                        text: 'work'
-                    }
-                },
-                {
-                    "key": 4,
-                    "type": "Gallery",
-                    "props": {"media": [pictures[0]]}
-                }
-            ]
+            };
+            return r[d.slug];
         };
 
         return new Promise(function (resolve) {
             window.setTimeout(function () {
-                resolve(response[data.day]);
+
+                resolve(response[path](data));
             }, 1000);
         });
     },
@@ -185,6 +200,17 @@ var actions = {
                 actionType: 'boxesLoaded',
                 day: day,
                 boxes: boxes
+            });
+        });
+    },
+    trips: function (slug) {
+        var data = {
+            slug: slug
+        };
+        request.get('/trip', data).then(function (trip) {
+            Dispatcher.handleViewAction({
+                actionType: 'tripLoaded',
+                trip: trip
             });
         });
     },
