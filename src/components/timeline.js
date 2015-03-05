@@ -10,7 +10,7 @@ var Timeline = React.createClass({
         for (var i = 1; i <= this.props.length; i += 1) {
             var className = 'day-' + i;
             days.push(
-                <li key={i} className={className}><Link to='day' params={{day: i}}>{i}</Link></li>
+                <li key={i} className={className}><Link to='day' params={{trip: this.props.params.trip, day: i}}>{i}</Link></li>
             );
         }
 

@@ -18,11 +18,11 @@ var Trip = React.createClass({
     },
     componentDidMount: function () {
         // TODO this should be: this.props.params.trip
-        actions.trips('newyork');
+        actions.trips(this.props.params.trip);
     },
     _onChange: function () {
         this.setState({
-            trip: TripStore.get('newyork')
+            trip: TripStore.get(this.props.params.trip)
         });
     },
     render: function () {
@@ -33,9 +33,9 @@ var Trip = React.createClass({
 
         return (
             <div>
-                <Timeline length={numberOfDays} />
+                <Timeline {...this.props} length={numberOfDays} />
                 <RouteHandler {...this.props} />
-                <Timeline length={numberOfDays} />
+                <Timeline {...this.props} length={numberOfDays} />
             </div>
         );
     }

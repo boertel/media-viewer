@@ -40,7 +40,7 @@ var Gallery = React.createClass({
             var component = <Component {...medium.props} ratio={ratio} windowWidth={windowWidth} />
             return (
                 <div style={style} key={key}>
-                    <Link to='media' params={{day: this.props.params.day, index: this.counter++}}>
+                    <Link to='media' params={{trip: this.props.params.trip, day: this.props.params.day, index: this.counter++}}>
                         {component}
                     </Link>
                 </div>

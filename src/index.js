@@ -8,6 +8,7 @@ var _ = require('lodash');
 var Day = require('./components/day');
 var Trip = require('./components/trip');
 var Timeline = require('./components/timeline');
+var Viewer = require('./components/viewer');
 
 var App = React.createClass({
     propTypes: {
@@ -35,10 +36,10 @@ var parse = {
 module.exports = function (element) {
     var routes = (
         <Route handler={App} path='/'>
-            <Route name='trip' handler={Trip}>
-                <Route name='day' path='/:day' handler={Day} ignoreScrollBehavior={true} />
-                <Route name='media' path='/:day/:index' handler={Day} ignoreScrollBehavior={true} />
-                <DefaultRoute handler={Trip} />
+            <Route name='trip' path='/:trip' handler={Trip}>
+                <Route name='day' path=':day' handler={Day} ignoreScrollBehavior={true}>
+                    <Route name='media' path=':index' handler={Viewer} ignoreScrollBehavior={true} />
+                </Route>
             </Route>
         </Route>
     );

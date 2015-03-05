@@ -38,12 +38,12 @@ var Viewer = React.createClass({
             index += 1;
         }
         else if (event.which === 27) {
-            this.transitionTo('day', {day: this.props.params.day});
+            this.transitionTo('day', {trip: this.props.params.trip, day: this.props.params.day});
             return;
         }
         if (index !== this.props.params.index
             && this.limit(index)()) {
-            this.transitionTo('media', {day: this.props.params.day, index: index});
+            this.transitionTo('media', {trip: this.props.params.trip, day: this.props.params.day, index: index});
         }
     },
     limit: function (index) {
@@ -71,7 +71,7 @@ var Viewer = React.createClass({
         var nextOnClick = this.limit(index + 1);
         return (
             <div>
-                <Link to='day' params={{day: this.props.params.day}}>Close</Link>
+                <Link to='day' params={{trip: this.props.params.trip, day: this.props.params.day}}>Close</Link>
                 <div>
                     {component}
                 </div>
@@ -79,9 +79,9 @@ var Viewer = React.createClass({
                     <span>{ index + 1 }</span> - <span>{ media.length }</span>
                 </div>
                 <div>
-                    <Link onClick={previousOnClick} to='media' params={{day: this.props.params.day, index: index - 1}}>Previous</Link>
+                    <Link onClick={previousOnClick} to='media' params={{trip: this.props.params.trip, day: this.props.params.day, index: index - 1}}>Previous</Link>
                     <span> - </span>
-                    <Link onClick={nextOnClick} to='media' params={{day: this.props.params.day, index: index + 1}}>Next</Link>
+                    <Link onClick={nextOnClick} to='media' params={{trip: this.props.params.trip, day: this.props.params.day, index: index + 1}}>Next</Link>
                 </div>
             </div>
         );

@@ -1,4 +1,5 @@
 var React = require('react');
+var { RouteHandler } = require('react-router');
 
 var BoxStore = require('../stores/BoxStore');
 var actions = require('../actions');
@@ -51,15 +52,11 @@ var Day = React.createClass({
         }
 
         var boxes = this.renderBoxes();
-        var viewer = null;
-        if (this.props.params.index !== undefined) {
-            viewer = <Viewer params={this.props.params} />;
-        }
 
         return (
             <div>
                 {boxes}
-                {viewer}
+                <RouteHandler {...this.props} />
             </div>
         );
     }
