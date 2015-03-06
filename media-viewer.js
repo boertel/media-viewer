@@ -35068,14 +35068,28 @@ var request = {
                 caption: "On 6th and W 53th St",
                 credit: "The Halal Guys",
                 datetime: "2014:08:25 14:22:54",
-                height: 1000,
                 marker: {
                     coordinates: [-73.9786388888889, 40.761922222222225],
                     size: "small",
                     symbol: ""
                 },
-                src: "http://placehold.it/750x1000",
-                width: 750
+                sizes: {
+                    original: {
+                        width: 750,
+                        height: 1000,
+                        src: "http://placehold.it/750x1000"
+                    },
+                    medium: {
+                        width: 375,
+                        height: 500,
+                        src: "http://placehold.it/500x375"
+                    },
+                    small: {
+                        width: 284,
+                        height: 379,
+                        src: "http://placehold.it/284x379"
+                    }
+                }
             }
         }, {
             type: "Picture",
@@ -35083,14 +35097,18 @@ var request = {
                 caption: "",
                 credit: "",
                 datetime: "2014:08:25 17:26:53",
-                height: 680,
                 marker: {
                     coordinates: [-73.940675, 40.75107222222222],
                     size: "small",
                     symbol: "rail-metro"
                 },
-                src: "http://placehold.it/1000x680",
-                width: 1000
+                sizes: {
+                    original: {
+                        src: "http://placehold.it/1000x680",
+                        width: 1000,
+                        height: 680
+                    }
+                }
             }
         }, {
             type: "Picture",
@@ -35098,14 +35116,18 @@ var request = {
                 caption: "Commute",
                 credit: "Brooklyn Subway Station",
                 datetime: "2014:08:25 17:27:03",
-                height: 750,
                 marker: {
                     coordinates: [-73.94065, 40.750908333333335],
                     size: "small",
                     symbol: "rail-metro"
                 },
-                src: "http://placehold.it/1000x750",
-                width: 1000
+                sizes: {
+                    original: {
+                        src: "http://placehold.it/1000x750",
+                        height: 750,
+                        width: 1000
+                    }
+                }
             }
         }, {
             type: "Picture",
@@ -35113,14 +35135,18 @@ var request = {
                 caption: "",
                 credit: "Trois-Rivières",
                 datetime: "2014:09:01 16:10:00",
-                height: 1000,
                 marker: {
                     coordinates: [-72.5425861111111, 46.34213888888889],
                     size: "small",
                     symbol: "beer"
                 },
-                src: "http://placehold.it/750x1000",
-                width: 750
+                sizes: {
+                    original: {
+                        src: "http://placehold.it/750x1000",
+                        height: 1000,
+                        width: 750
+                    }
+                }
             }
         }, {
             type: "Picture",
@@ -35128,14 +35154,18 @@ var request = {
                 caption: "Viande et frites après une après-midi sportive",
                 credit: "Trois-Rivières",
                 datetime: "2014:09:01 16:20:52",
-                height: 750,
                 marker: {
                     coordinates: [-72.54259444444445, 46.342175000000005],
                     size: "small",
                     symbol: "restaurant"
                 },
-                src: "http://placehold.it/1000x750",
-                width: 1000
+                sizes: {
+                    original: {
+                        src: "http://placehold.it/1000x750",
+                        height: 750,
+                        width: 1000
+                    }
+                }
             }
         }];
 
@@ -35204,7 +35234,6 @@ var request = {
 
         return new Promise(function (resolve) {
             window.setTimeout(function () {
-
                 resolve(response[path](data));
             }, 1000);
         });
@@ -35475,7 +35504,8 @@ var LazyLoad = React.createClass({
             cx = React.addons.classSet,
             preloadHeight = {
             display: "inline-block",
-            height: this.props.height
+            height: this.props.height,
+            width: this.props.width
         },
             classes = cx({
             "lazy-load": true,
@@ -35523,13 +35553,47 @@ var Picture = React.createClass({
     displayName: "Picture",
 
     mixins: [Ratio],
+    flexibility: 1.1,
+    toArray: function toArray() {
+        var array = [];
+        for (var key in this.props.sizes) {
+            array.push(this.props.sizes[key]);
+        }
+
+        return array.sort(function (a, b) {
+            return a.width > b.width;
+        });
+    },
+
+    closest: function closest(width, height) {
+        var choosenOne = this.props.sizes.original,
+            flexibility = this.flexibility;
+
+        var array = this.toArray();
+
+        for (var i = 0; i < array.length - 1; i += 1) {
+            var current = array[i],
+                next = array[i + 1];
+            if (current.width * flexibility >= width && width < next.width) {
+                return current;
+            }
+        }
+
+        return choosenOne;
+    },
     render: function render() {
         var _ratio = this.ratio();
 
         var width = _ratio.width;
         var height = _ratio.height;
 
-        return React.createElement("img", { src: this.props.src, width: width, height: height });
+        var image = this.closest(width, height);
+
+        return React.createElement(
+            LazyLoad,
+            { width: width, height: height },
+            React.createElement("img", { src: image.src, width: width, height: height })
+        );
     }
 });
 
@@ -35651,7 +35715,6 @@ var Trip = React.createClass({
         };
     },
     componentDidMount: function componentDidMount() {
-        // TODO this should be: this.props.params.trip
         actions.trips(this.props.params.trip);
     },
     _onChange: function _onChange() {
@@ -36026,9 +36089,9 @@ BoxStore.dispatcherToken = Dispatcher.register(function (payload) {
     switch (action.actionType) {
         case "boxesLoaded":
             _boxes[action.day] = action.boxes;
+            BoxStore.emitChange();
             break;
     }
-    BoxStore.emitChange();
     return true;
 });
 
@@ -36069,7 +36132,10 @@ MediaStore.dispatcherToken = Dispatcher.register(function (payload) {
             nextMedia.forEach(function (box) {
                 box.props.counter = 0;
                 box.props.media.forEach(function (medium) {
-                    if (medium.props.width && medium.props.height) {
+                    if (medium.props.sizes) {
+                        medium.props.src = medium.props.sizes.original.src;
+                        medium.props.width = medium.props.sizes.original.width;
+                        medium.props.height = medium.props.sizes.original.height;
                         medium.props.aspect_ratio = medium.props.width / medium.props.height;
                     }
                 });
@@ -36077,9 +36143,9 @@ MediaStore.dispatcherToken = Dispatcher.register(function (payload) {
                 _counter += box.props.media.length;
             });
             _media = _media.concat(nextMedia);
+            MediaStore.emitChange();
             break;
     }
-    MediaStore.emitChange();
     return true;
 });
 
@@ -36105,9 +36171,9 @@ TripStore.dispatcherToken = Dispatcher.register(function (payload) {
     switch (action.actionType) {
         case "tripLoaded":
             _trips[action.trip.slug] = action.trip;
+            TripStore.emitChange();
             break;
     }
-    TripStore.emitChange();
     return true;
 });
 

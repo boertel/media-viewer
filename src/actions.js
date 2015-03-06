@@ -9,7 +9,6 @@ var request = {
                     "caption": "On 6th and W 53th St",
                     "credit": "The Halal Guys",
                     "datetime": "2014:08:25 14:22:54",
-                    "height": 1000,
                     "marker": {
                         "coordinates": [
                             -73.9786388888889,
@@ -18,8 +17,23 @@ var request = {
                         "size": "small",
                         "symbol": ""
                     },
-                    "src": "http://placehold.it/750x1000",
-                    "width": 750
+                    "sizes": {
+                        "original": {
+                            "width": 750,
+                            "height": 1000,
+                            "src": "http://placehold.it/750x1000"
+                        },
+                        "medium": {
+                            "width": 375,
+                            "height": 500,
+                            "src": "http://placehold.it/500x375"
+                        },
+                        "small": {
+                            "width": 284,
+                            "height": 379,
+                            "src": "http://placehold.it/284x379"
+                        }
+                    }
                 }
             },
             {
@@ -28,7 +42,6 @@ var request = {
                     "caption": "",
                     "credit": "",
                     "datetime": "2014:08:25 17:26:53",
-                    "height": 680,
                     "marker": {
                         "coordinates": [
                             -73.940675,
@@ -37,8 +50,13 @@ var request = {
                         "size": "small",
                         "symbol": "rail-metro"
                     },
-                    "src": "http://placehold.it/1000x680",
-                    "width": 1000
+                    "sizes": {
+                        "original": {
+                            "src": "http://placehold.it/1000x680",
+                            "width": 1000,
+                            "height": 680
+                        }
+                    }
                 }
             },
             {
@@ -47,7 +65,6 @@ var request = {
                     "caption": "Commute",
                     "credit": "Brooklyn Subway Station",
                     "datetime": "2014:08:25 17:27:03",
-                    "height": 750,
                     "marker": {
                         "coordinates": [
                             -73.94065,
@@ -56,8 +73,13 @@ var request = {
                         "size": "small",
                         "symbol": "rail-metro"
                     },
-                    "src": "http://placehold.it/1000x750",
-                    "width": 1000
+                    "sizes": {
+                        "original": {
+                            "src": "http://placehold.it/1000x750",
+                            "height": 750,
+                            "width": 1000
+                        }
+                    }
                 }
             },
             {
@@ -66,7 +88,6 @@ var request = {
                     "caption": "",
                     "credit": "Trois-Rivières",
                     "datetime": "2014:09:01 16:10:00",
-                    "height": 1000,
                     "marker": {
                         "coordinates": [
                             -72.5425861111111,
@@ -75,8 +96,13 @@ var request = {
                         "size": "small",
                         "symbol": "beer"
                     },
-                    "src": "http://placehold.it/750x1000",
-                    "width": 750
+                    "sizes": {
+                        "original": {
+                            "src": "http://placehold.it/750x1000",
+                            "height": 1000,
+                            "width": 750
+                        }
+                    }
                 }
             },
             {
@@ -85,7 +111,6 @@ var request = {
                     "caption": "Viande et frites après une après-midi sportive",
                     "credit": "Trois-Rivières",
                     "datetime": "2014:09:01 16:20:52",
-                    "height": 750,
                     "marker": {
                         "coordinates": [
                             -72.54259444444445,
@@ -94,8 +119,13 @@ var request = {
                         "size": "small",
                         "symbol": "restaurant"
                     },
-                    "src": "http://placehold.it/1000x750",
-                    "width": 1000
+                    "sizes": {
+                        "original": {
+                            "src": "http://placehold.it/1000x750",
+                            "height": 750,
+                            "width": 1000
+                        }
+                    }
                 }
             }
         ];
@@ -175,7 +205,6 @@ var request = {
 
         return new Promise(function (resolve) {
             window.setTimeout(function () {
-
                 resolve(response[path](data));
             }, 1000);
         });

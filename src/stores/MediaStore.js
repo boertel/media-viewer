@@ -19,6 +19,7 @@ var MediaStore = makeStore({
     }
 });
 
+
 MediaStore.dispatcherToken = Dispatcher.register(payload => {
     var action = payload.action;
     switch (action.actionType) {
@@ -30,7 +31,10 @@ MediaStore.dispatcherToken = Dispatcher.register(payload => {
             nextMedia.forEach(function (box) {
                 box.props.counter = 0;
                 box.props.media.forEach(function (medium) {
-                    if (medium.props.width  && medium.props.height) {
+                    if (medium.props.sizes) {
+                        medium.props.src = medium.props.sizes.original.src;
+                        medium.props.width = medium.props.sizes.original.width;
+                        medium.props.height = medium.props.sizes.original.height;
                         medium.props.aspect_ratio = medium.props.width / medium.props.height;
                     }
                 });

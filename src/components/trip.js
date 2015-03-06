@@ -17,7 +17,6 @@ var Trip = React.createClass({
         };
     },
     componentDidMount: function () {
-        // TODO this should be: this.props.params.trip
         actions.trips(this.props.params.trip);
     },
     _onChange: function () {

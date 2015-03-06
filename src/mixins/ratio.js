@@ -1,5 +1,5 @@
 var RatioMixin = {
-    ratio: function (ratio) {
+        ratio: function (ratio) {
         var width = this.props.width,
             height = this.props.height;
 

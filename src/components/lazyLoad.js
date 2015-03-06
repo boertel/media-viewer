@@ -35,7 +35,8 @@ var LazyLoad = React.createClass({
             cx = React.addons.classSet,
             preloadHeight = {
                 display: 'inline-block',
-                height: this.props.height
+                height: this.props.height,
+                width: this.props.width
             },
             classes = cx({
                 'lazy-load': true,
