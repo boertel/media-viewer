@@ -1,9 +1,11 @@
-var React = require('react');
+var React = require('react'),
+    Halogen = require('halogen');
 
 var Loader = React.createClass({
     render: function () {
+        var color = 'red';
         return (
-            <div>Loading...</div>
+            <div><Halogen.ClipLoader color={color}/></div>
         );
     }
 });

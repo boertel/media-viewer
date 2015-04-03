@@ -23,9 +23,12 @@ var MediaStore = makeStore({
 MediaStore.dispatcherToken = Dispatcher.register(payload => {
     var action = payload.action;
     switch (action.actionType) {
-        case 'boxesLoaded':
+        case 'get:/boxes':
+            if (action.response === 'pending') {
+                return true;
+            }
             var _counter = 0;
-            var nextMedia = action.boxes.filter(function (box) {
+            var nextMedia = action.response.filter(function (box) {
                 return box.type === 'Gallery';
             });
             nextMedia.forEach(function (box) {
@@ -42,9 +45,12 @@ MediaStore.dispatcherToken = Dispatcher.register(payload => {
                 _counter += box.props.media.length;
             });
             _media = _media.concat(nextMedia);
-            MediaStore.emitChange();
         break;
+
+        default:
+            return true;
     }
+    MediaStore.emitChange();
     return true;
 });
 

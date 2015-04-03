@@ -11,11 +11,15 @@ TripStore.dispatcherToken = Dispatcher.register(payload => {
     var action = payload.action;
 
     switch (action.actionType) {
-        case 'tripLoaded':
-            _trips[action.trip.slug] = action.trip;
-            TripStore.emitChange();
+        case 'get:/trip':
+            // TODO where should pending be handle ? action, store, components ? should there be different actionType -SUCCESS and -PENDING
+            _trips[action.queryParams.slug] = action.response;
         break;
+
+        default:
+            return true;
     }
+    TripStore.emitChange();
     return true;
 });
 

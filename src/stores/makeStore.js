@@ -14,7 +14,7 @@ module.exports = function (options) {
             this.removeListener(CHANGE_EVENT, callback);
         },
         listenTo: {
-            componentWillMount() {
+            componentDidMount() {
                 store.addChangeListener(this._onChange);
             },
             componentWillUnmount() {

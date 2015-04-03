@@ -47,7 +47,7 @@ var Day = React.createClass({
         return boxes;
     },
     render: function () {
-        if (this.state.boxes.length === 0) {
+        if (this.state.boxes === 'pending' || this.state.boxes.length === 0) {
             return <Loader />;
         }
 

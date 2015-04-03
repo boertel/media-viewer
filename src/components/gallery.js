@@ -21,6 +21,9 @@ var Gallery = React.createClass({
     _onChange: function () {
         this.setState(MediaStore.get(this.props.id));
     },
+    onMouseOver: function (e) {
+        console.log(e);
+    },
     renderRow: function (media, i) {
         var margin = 10;
         var length = media.length;
@@ -37,10 +40,10 @@ var Gallery = React.createClass({
             style.marginRight = (i === length - 1) ? 0 : margin;
             var key = 'media-' + i;
             var Component = components[medium.type];
-            var component = <Component {...medium.props} ratio={ratio} windowWidth={windowWidth} />
+            var component = <Component {...medium.props} ratio={ratio} windowWidth={windowWidth} onMouseEnter={this.onMouseOver} />
             return (
                 <div style={style} key={key}>
-                    <Link to='media' params={{trip: this.props.params.trip, day: this.props.params.day, index: this.counter++}}>
+                    <Link to='media' params={{trip: this.props.params.trip, day: this.props.params.day, index: this.counter++}} onMouseOver={this.onMouseOver}>
                         {component}
                     </Link>
                 </div>

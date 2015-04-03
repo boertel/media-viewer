@@ -4,9 +4,9 @@ var { RouteHandler } = require('react-router');
 var actions = require('../actions');
 var TripStore = require('../stores/TripStore');
 
-var Day = require('./day');
 var Timeline = require('./timeline');
 var Loader = require('./loader');
+var Map = require('./map');
 
 
 var Trip = React.createClass({
@@ -25,7 +25,8 @@ var Trip = React.createClass({
         });
     },
     render: function () {
-        if (this.state.trip === undefined) {
+        // TODO WRONG, this.state.status === 'pending'
+        if (this.state.trip === "pending" || this.state.trip === undefined) {
             return <Loader />;
         }
         var numberOfDays = this.state.trip.days;
@@ -33,6 +34,7 @@ var Trip = React.createClass({
         return (
             <div>
                 <Timeline {...this.props} length={numberOfDays} />
+                <Map accessToken='pk.eyJ1IjoiYm9lcnRlbCIsImEiOiJFV0tXLTQ4In0.4PRhZjzKIuWuhy2ytRi7Eg' mapId='boertel.h95nl1fe' />
                 <RouteHandler {...this.props} />
                 <Timeline {...this.props} length={numberOfDays} />
             </div>

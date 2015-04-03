@@ -13,11 +13,14 @@ BoxStore.dispatcherToken = Dispatcher.register(payload => {
     var action = payload.action;
 
     switch (action.actionType) {
-        case 'boxesLoaded':
-            _boxes[action.day] = action.boxes;
-            BoxStore.emitChange();
+        case 'get:/boxes':
+            _boxes[action.queryParams.day] = action.response;
         break;
+
+        default:
+            return true;
     }
+    BoxStore.emitChange();
     return true;
 });
 

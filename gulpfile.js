@@ -39,14 +39,14 @@ gulp.task('lint', function () {
         .pipe(jshint.reporter('default'));
 });
 
-gulp.task('watch', ['build', 'min'], function () {
-    gulp.watch(paths.scripts, ['build', 'min'])
+gulp.task('watch', ['build'], function () {
+    gulp.watch(paths.scripts, ['build'])
 });
 
 gulp.task('webserver', function() {
     gulp.src('.')
         .pipe(webserver({
-            livereload: true,
+            livereload: false,
             directoryListing: true,
             port: 1337,
             open: false

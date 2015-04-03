@@ -2,6 +2,7 @@ var React = require('react');
 
 var Ratio = require('../mixins/ratio');
 var LazyLoad = require('./lazyLoad.js');
+var actions = require('../actions');
 
 var Picture = React.createClass({
     mixins: [ Ratio ],
@@ -16,7 +17,6 @@ var Picture = React.createClass({
             return a.width > b.width;
         });
     },
-
     closest: function (width, height) {
         var choosenOne = this.props.sizes.original,
             flexibility = this.flexibility;
@@ -32,6 +32,17 @@ var Picture = React.createClass({
         }
 
         return choosenOne;
+    },
+    // TODO both method should be in a mixin
+    componentDidMount: function () {
+        if (this.props.marker) {
+            actions.addMarker(this.props.marker);
+        }
+    },
+    componentWillUnmount: function () {
+        if (this.props.marker) {
+            actions.removeMarker(this.props.marker);
+        }
     },
     render: function () {
         var { width, height } = this.ratio();
