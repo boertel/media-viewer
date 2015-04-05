@@ -53,8 +53,13 @@ var Day = React.createClass({
 
         var boxes = this.renderBoxes();
 
+        if (this.props.colors) {
+            var style = {
+                backgroundColor: this.props.colors[this.props.params.day]
+            }
+        }
         return (
-            <div>
+            <div style={style}>
                 {boxes}
                 <RouteHandler {...this.props} />
             </div>

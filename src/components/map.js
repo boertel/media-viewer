@@ -28,12 +28,13 @@ var Map = React.createClass({
     },
     render: function () {
         var style = {
-            height: 200
+            height: 200,
+            borderColor: this.props.color
         };
         return (
             <div>
                 <div id='map' style={style}></div>
-                <Markers map={this.map} markers={this.state.markers} />
+                <Markers map={this.map} markers={this.state.markers} color={this.props.color} />
             </div>
         );
     }

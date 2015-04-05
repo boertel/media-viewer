@@ -25,19 +25,22 @@ var Markers = React.createClass({
         })
     },
     render: function () {
-        if (!this.props.map) {
+        // when unmounting markers, markers will reach 0
+        if (!this.props.map || this.props.markers.length == 0) {
             return null;
         }
+        var components = [];
         var markers = this.props.markers.map(function (marker) {
+            marker.color = this.props.color;
             var m = this.createMarker(marker);
-            <Marker map={this.props.map} marker={m} />
+            components.push(<Marker map={this.props.map} marker={m} />)
             return m;
         }, this);
 
-        //var group = L.featureGroup(markers);
-        //this.props.map.fitBounds(group.getBounds(), {maxZoom: 14});
+        var group = L.featureGroup(markers);
+        this.props.map.fitBounds(group.getBounds(), {maxZoom: 14});
 
-        return null;
+        return <div>{components}</div>;
     }
 });
 

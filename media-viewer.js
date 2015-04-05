@@ -37906,11 +37906,14 @@ response["/boxes"] = function (d) {
     return r[d.day];
 };
 
+var colors = ["#f1f075", "#eaf7ca", "#c5e96f", "#a3e46b", "#7ec9b1", "#b7ddf3", "#63b6e5", "#1087bf", "#548cba", "#677da7", "#9c89cc", "#c091e6", "#d27591", "#f86767", "#e7857f"];
+
 response["/trip"] = function (d) {
     var r = {
         newyork: {
             slug: "newyork",
-            days: 2
+            days: 2,
+            colors: colors
         }
     };
     return r[d.slug];
@@ -38032,9 +38035,14 @@ var Day = React.createClass({
 
         var boxes = this.renderBoxes();
 
+        if (this.props.colors) {
+            var style = {
+                backgroundColor: this.props.colors[this.props.params.day]
+            };
+        }
         return React.createElement(
             "div",
-            null,
+            { style: style },
             boxes,
             React.createElement(RouteHandler, this.props)
         );
@@ -38076,9 +38084,7 @@ var Gallery = React.createClass({
     _onChange: function _onChange() {
         this.setState(MediaStore.get(this.props.id));
     },
-    onMouseOver: function onMouseOver(e) {
-        console.log(e);
-    },
+    onMouseOver: function onMouseOver(e) {},
     renderRow: function renderRow(media, i) {
         var margin = 10;
         var length = media.length;
@@ -38177,6 +38183,9 @@ var LazyLoad = React.createClass({
         window.addEventListener("resize", this.handleScroll);
         this.handleScroll();
     },
+    componentWillUnmount: function componentWillUnmount() {
+        this.handleVisible();
+    },
     render: function render() {
         var renderEl = "",
             cx = React.addons.classSet,
@@ -38210,7 +38219,7 @@ var Loader = React.createClass({
     displayName: "Loader",
 
     render: function render() {
-        var color = "red";
+        var color = "#CCCCCC";
         return React.createElement(
             "div",
             null,
@@ -38255,13 +38264,14 @@ var Map = React.createClass({
     },
     render: function render() {
         var style = {
-            height: 200
+            height: 200,
+            borderColor: this.props.color
         };
         return React.createElement(
             "div",
             null,
             React.createElement("div", { id: "map", style: style }),
-            React.createElement(Markers, { map: this.map, markers: this.state.markers })
+            React.createElement(Markers, { map: this.map, markers: this.state.markers, color: this.props.color })
         );
     }
 });
@@ -38322,19 +38332,26 @@ var Markers = React.createClass({
         });
     },
     render: function render() {
-        if (!this.props.map) {
+        // when unmounting markers, markers will reach 0
+        if (!this.props.map || this.props.markers.length == 0) {
             return null;
         }
+        var components = [];
         var markers = this.props.markers.map(function (marker) {
+            marker.color = this.props.color;
             var m = this.createMarker(marker);
-            React.createElement(Marker, { map: this.props.map, marker: m });
+            components.push(React.createElement(Marker, { map: this.props.map, marker: m }));
             return m;
         }, this);
 
-        //var group = L.featureGroup(markers);
-        //this.props.map.fitBounds(group.getBounds(), {maxZoom: 14});
+        var group = L.featureGroup(markers);
+        this.props.map.fitBounds(group.getBounds(), { maxZoom: 14 });
 
-        return null;
+        return React.createElement(
+            "div",
+            null,
+            components
+        );
     }
 });
 
@@ -38470,13 +38487,19 @@ var Timeline = React.createClass({
     render: function render() {
         var days = [];
         for (var i = 1; i <= this.props.length; i += 1) {
-            var className = "day-" + i;
+            var className = "day",
+                style = {};
+            if ("colors" in this.props) {
+                style = {
+                    backgroundColor: this.props.colors[i - 1]
+                };
+            }
             days.push(React.createElement(
                 "li",
                 { key: i, className: className },
                 React.createElement(
                     Link,
-                    { to: "day", params: { trip: this.props.params.trip, day: i } },
+                    { to: "day", params: { trip: this.props.params.trip, day: i }, style: style },
                     i
                 )
             ));
@@ -38484,7 +38507,7 @@ var Timeline = React.createClass({
 
         return React.createElement(
             "ul",
-            null,
+            { className: "timeline" },
             React.createElement(
                 "li",
                 null,
@@ -38537,15 +38560,16 @@ var Trip = React.createClass({
         if (this.state.trip === "pending" || this.state.trip === undefined) {
             return React.createElement(Loader, null);
         }
-        var numberOfDays = this.state.trip.days;
+        var numberOfDays = this.state.trip.days,
+            color = this.state.trip.colors[this.props.params.day - 1];
 
         return React.createElement(
             "div",
             null,
-            React.createElement(Timeline, _extends({}, this.props, { length: numberOfDays })),
-            React.createElement(Map, { accessToken: "pk.eyJ1IjoiYm9lcnRlbCIsImEiOiJFV0tXLTQ4In0.4PRhZjzKIuWuhy2ytRi7Eg", mapId: "boertel.h95nl1fe" }),
+            React.createElement(Map, { accessToken: "pk.eyJ1IjoiYm9lcnRlbCIsImEiOiJFV0tXLTQ4In0.4PRhZjzKIuWuhy2ytRi7Eg", mapId: "boertel.h95nl1fe", color: color }),
+            React.createElement(Timeline, _extends({}, this.props, { length: numberOfDays, colors: this.state.trip.colors })),
             React.createElement(RouteHandler, this.props),
-            React.createElement(Timeline, _extends({}, this.props, { length: numberOfDays }))
+            React.createElement(Timeline, _extends({}, this.props, { length: numberOfDays, colors: this.state.trip.colors }))
         );
     }
 });

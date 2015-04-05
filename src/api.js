@@ -189,11 +189,30 @@ response['/boxes'] = function (d) {
     return r[d.day];
 };
 
+var colors = [
+    "#f1f075"
+    ,"#eaf7ca"
+    ,"#c5e96f"
+    ,"#a3e46b"
+    ,"#7ec9b1"
+    ,"#b7ddf3"
+    ,"#63b6e5"
+    ,"#1087bf"
+    ,"#548cba"
+    ,"#677da7"
+    ,"#9c89cc"
+    ,"#c091e6"
+    ,"#d27591"
+    ,"#f86767"
+    ,"#e7857f"
+];
+
 response['/trip'] = function (d) {
     var r = {
         'newyork': {
             slug: 'newyork',
-            days: 2
+            days: 2,
+            colors: colors
         }
     };
     return r[d.slug];

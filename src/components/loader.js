@@ -3,7 +3,7 @@ var React = require('react'),
 
 var Loader = React.createClass({
     render: function () {
-        var color = 'red';
+        var color = '#CCCCCC';
         return (
             <div><Halogen.ClipLoader color={color}/></div>
         );

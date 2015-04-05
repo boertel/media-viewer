@@ -22,7 +22,6 @@ var Gallery = React.createClass({
         this.setState(MediaStore.get(this.props.id));
     },
     onMouseOver: function (e) {
-        console.log(e);
     },
     renderRow: function (media, i) {
         var margin = 10;

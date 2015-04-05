@@ -29,14 +29,15 @@ var Trip = React.createClass({
         if (this.state.trip === "pending" || this.state.trip === undefined) {
             return <Loader />;
         }
-        var numberOfDays = this.state.trip.days;
+        var numberOfDays = this.state.trip.days,
+            color = this.state.trip.colors[this.props.params.day - 1];
 
         return (
             <div>
-                <Timeline {...this.props} length={numberOfDays} />
-                <Map accessToken='pk.eyJ1IjoiYm9lcnRlbCIsImEiOiJFV0tXLTQ4In0.4PRhZjzKIuWuhy2ytRi7Eg' mapId='boertel.h95nl1fe' />
+                <Map accessToken='pk.eyJ1IjoiYm9lcnRlbCIsImEiOiJFV0tXLTQ4In0.4PRhZjzKIuWuhy2ytRi7Eg' mapId='boertel.h95nl1fe' color={color} />
+                <Timeline {...this.props} length={numberOfDays} colors={this.state.trip.colors} />
                 <RouteHandler {...this.props} />
-                <Timeline {...this.props} length={numberOfDays} />
+                <Timeline {...this.props} length={numberOfDays} colors={this.state.trip.colors} />
             </div>
         );
     }

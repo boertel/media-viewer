@@ -30,6 +30,9 @@ var LazyLoad = React.createClass({
         window.addEventListener('resize', this.handleScroll);
         this.handleScroll();
     },
+    componentWillUnmount: function () {
+        this.handleVisible();
+    },
     render: function () {
         var renderEl = '',
             cx = React.addons.classSet,

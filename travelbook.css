@@ -1,0 +1,48 @@
+html, button, input, select, textarea,
+.pure-g [class *= "pure-u"] {
+    /* Set your content font stack here: */
+    font-family: "PT Sans";
+}
+
+/* map */
+#map {
+    border-width: 0px;
+    border-bottom-width: 6px;
+    border-style: solid;
+}
+
+@media screen and (min-width: 35.5em) {
+    #map {
+        border-width: 0px;
+        border-right-width: 6px;
+    }
+}
+
+/* timeline */
+ul.timeline {
+    text-align: center;
+    padding: 0;
+}
+ul.timeline li {
+    list-style: none;
+    display: inline-block;
+    margin: 0 0.2em 0.5em 0.2em;
+    opacity: 0.3;
+}
+
+ul.timeline li.active {
+    opacity: 0.9;
+}
+
+ul.timeline li a {
+    display: block;
+    text-decoration: none;
+    color: #434343;
+    width: 32px;
+    height: 32px;
+    line-height: 2em;
+    border-radius: 20px;
+}
+ul.timeline li:hover {
+    opacity: 1;
+}
